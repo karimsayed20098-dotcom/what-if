@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Explore fascinating What If questions, vote, and discover endless possibilities.">
+<title>WHAT IF? - Explore Possibilities</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #090b18;
+  color: white;
+  min-height: 100vh;
+}
+
+header {
+  padding: 22px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #25263e;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+  color: #a78bfa;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+.hero {
+  text-align: center;
+  padding: 85px 20px 55px;
+  background: radial-gradient(
+    circle at center,
+    #29205b,
+    #090b18 70%
+  );
+}
+
+.hero h1 {
+  font-size: clamp(42px, 8vw, 75px);
+  margin-bottom: 20px;
+}
+
+.hero h1 span {
+  color: #a78bfa;
+}
+
+.hero p {
+  color: #c1bfd4;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  padding: 13px 22px;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.primary {
+  background: #8b5cf6;
+  color: white;
+}
+
+.primary:hover {
+  background: #7040d9;
+}
+
+.search {
+  width: min(450px, 90%);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #41405e;
+  background: #17182c;
+  color: white;
+  margin-top: 25px;
+}
+
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 35px 20px;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.category {
+  background: #1c1d32;
+  color: white;
+  border: 1px solid #34344e;
+}
+
+.category.active {
+  background: #8b5cf6;
+}
+
+.section-title {
+  margin-bottom: 22px;
+  font-size: 25px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: #151629;
+  border: 1px solid #292a43;
+  border-radius: 15px;
+  padding: 23px;
+  transition: .2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #8b5cf6;
+}
+
+.card .emoji {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.card h3 {
+  font-size: 19px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #aaa8c0;
+  font-size: 13px;
+}
+
+.vote {
+  background: #292342;
+  color: #c4aaff;
+  padding: 9px 13px;
+}
+
+.submit-section {
+  margin-top: 55px;
+  padding: 30px;
+  background: #151629;
+  border: 1px solid #292a43;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.submit-section input {
+  width: min(450px, 100%);
+  padding: 14px;
+  margin: 20px 0;
+  background: #090b18;
+  border: 1px solid #41405e;
+  color: white;
+  border-radius: 8px;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #8b89a5;
+  border-top: 1px solid #25263e;
+  margin-top: 50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">WHAT IF?</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#explore">Explore</a>
+    <a href="#submit">Suggest</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h1>What If <span>Everything</span><br>Was Different?</h1>
+
+  <p>
+    Explore impossible ideas.
+    Imagine endless possibilities.
+  </p>
+
+  <button class="primary" onclick="randomQuestion()">
+    🎲 Surprise Me
+  </button>
+
+  <br>
+
+  <input
+    class="search"
+    id="search"
+    placeholder="Search questions..."
+    oninput="renderQuestions()"
+  >
+</section>
+
+<main id="explore">
+
+  <h2 class="section-title">Explore Categories</h2>
+
+  <div class="categories">
+    <button class="category active" onclick="filter('All',this)">All</button>
+    <button class="category" onclick="filter('Science',this)">🔬 Science</button>
+    <button class="category" onclick="filter('Life',this)">🌍 Life</button>
+    <button class="category" onclick="filter('Future',this)">🚀 Future</button>
+    <button class="category" onclick="filter('Space',this)">🌌 Space</button>
+  </div>
+
+  <h2 class="section-title">Popular What If Questions</h2>
+
+  <div class="grid" id="questions"></div>
+
+  <section class="submit-section" id="submit">
+    <h2>Got a crazy idea?</h2>
+    <p style="color:#aaa;margin-top:12px">
+      Share your own What If question!
+    </p>
+
+    <input
+      id="newQuestion"
+      placeholder="What if...?"
+    >
+
+    <br>
+
+    <button class="primary" onclick="submitQuestion()">
+      Submit Idea
+    </button>
+
+    <p id="message" style="margin-top:15px"></p>
+  </section>
+
+</main>
+
+<footer>
+  <h2 class="logo">WHAT IF?</h2>
+  <p style="margin-top:12px">
+    Imagine More. Explore Everything.
+  </p>
+  <p style="margin-top:20px">
+    © 2026 WHAT IF? All Rights Reserved.
+  </p>
+</footer>
+
+<script>
+
+const questions = [
+  {
+    id:1,
+    emoji:"🌍",
+    category:"Life",
+    title:"What if the internet disappeared for one year?",
+    votes:120
+  },
+  {
+    id:2,
+    emoji:"🚀",
+    category:"Space",
+    title:"What if humans could travel faster than light?",
+    votes:95
+  },
+  {
+    id:3,
+    emoji:"🧬",
+    category:"Science",
+    title:"What if humans never needed sleep?",
+    votes:180
+  },
+  {
+    id:4,
+    emoji:"🤖",
+    category:"Future",
+    title:"What if robots controlled every city?",
+    votes:150
+  },
+  {
+    id:5,
+    emoji:"⏳",
+    category:"Science",
+    title:"What if you could stop time for one hour?",
+    votes:210
+  },
+  {
+    id:6,
+    emoji:"🌊",
+    category:"Life",
+    title:"What if humans could breathe underwater?",
+    votes:130
+  },
+  {
+    id:7,
+    emoji:"🌌",
+    category:"Space",
+    title:"What if Earth had two moons?",
+    votes:85
+  },
+  {
+    id:8,
+    emoji:"🔮",
+    category:"Future",
+    title:"What if you could see your future?",
+    votes:250
+  }
+];
+
+let selectedCategory = "All";
+
+let voted = JSON.parse(
+  localStorage.getItem("whatif_voted") || "[]"
+);
+
+function renderQuestions() {
+
+  const search = document
+    .getElementById("search")
+    .value.toLowerCase();
+
+  const container = document.getElementById("questions");
+
+  container.innerHTML = "";
+
+  const filtered = questions.filter(q =>
+    (selectedCategory === "All" ||
+    q.category === selectedCategory) &&
+    q.title.toLowerCase().includes(search)
+  );
+
+  filtered.forEach(q => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const emoji = document.createElement("div");
+    emoji.className = "emoji";
+    emoji.textContent = q.emoji;
+
+    const title = document.createElement("h3");
+    title.textContent = q.title;
+
+    const footer = document.createElement("div");
+    footer.className = "card-footer";
+
+    const count = document.createElement("span");
+    count.textContent = q.votes + " votes";
+
+    const vote = document.createElement("button");
+    vote.className = "vote";
+    vote.textContent = voted.includes(q.id)
+      ? "Voted ✓"
+      : "👍 Vote";
+
+    vote.disabled = voted.includes(q.id);
+
+    vote.onclick = () => {
+      if (!voted.includes(q.id)) {
+        q.votes++;
+        voted.push(q.id);
+
+        localStorage.setItem(
+          "whatif_voted",
+          JSON.stringify(voted)
+        );
+
+        renderQuestions();
+      }
+    };
+
+    footer.append(count, vote);
+    card.append(emoji, title, footer);
+    container.append(card);
+  });
+
+  if (filtered.length === 0) {
+    container.textContent = "No questions found.";
+  }
+}
+
+function filter(category, button) {
+
+  selectedCategory = category;
+
+  document.querySelectorAll(".category").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  renderQuestions();
+}
+
+function randomQuestion() {
+
+  const q = questions[
+    Math.floor(Math.random() * questions.length)
+  ];
+
+  alert(q.title);
+}
+
+function submitQuestion() {
+
+  const input = document.getElementById("newQuestion");
+
+  const message = document.getElementById("message");
+
+  const value = input.value.trim();
+
+  if (value.length < 10) {
+    message.textContent =
+      "Please enter a longer question!";
+    return;
+  }
+
+  const customQuestions = JSON.parse(
+    localStorage.getItem("whatif_custom") || "[]"
+  );
+
+  customQuestions.push(value);
+
+  localStorage.setItem(
+    "whatif_custom",
+    JSON.stringify(customQuestions)
+  );
+
+  message.textContent =
+    "Your idea was saved on this device!";
+
+  input.value = "";
+}
+
+renderQuestions();
+
+</script>
+
+</body>
+</html>
